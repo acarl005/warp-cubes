@@ -4,7 +4,10 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 0.1, 1000)
-const renderer = new THREE.WebGLRenderer({ alpha: true })
+const renderer = new THREE.WebGLRenderer({
+  alpha: true,
+  preserveDrawingBuffer: true
+})
 renderer.setSize(window.innerWidth, window.innerHeight)
 scene.background = null
 document.body.appendChild(renderer.domElement)
@@ -87,10 +90,6 @@ const light = new THREE.HemisphereLight(0xffffff, 0x080820)
 light.position.set(-5, 5, 0)
 scene.add(light)
 
-camera.position.x = -5
-camera.position.y = 5
-camera.position.z = 5
-
 new OrbitControls(camera, renderer.domElement)
 
 function animate() {
@@ -102,4 +101,24 @@ function render() {
   renderer.render(scene, camera)
 }
 
+camera.position.x = -11.4
+camera.position.y = 8.9
+camera.position.z = 17.9
+
+camera.rotation.x = -0.571
+camera.rotation.y = -0.536
+camera.rotation.z = -0.318
+
 animate()
+
+function downloadBase64File(contentBase64: string, fileName: string) {
+    const downloadLink = document.createElement("a")
+    document.body.appendChild(downloadLink)
+
+    downloadLink.href = contentBase64
+    downloadLink.target = "_self"
+    downloadLink.download = fileName
+    downloadLink.click()
+}
+
+downloadBase64File(renderer.domElement.toDataURL(), "cube.png")
