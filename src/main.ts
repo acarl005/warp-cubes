@@ -16,6 +16,9 @@ function shrinkFactor(a: number): number {
   return -1 * Math.abs(a - 4) + 4
 }
 
+const baseSize = 1.2
+const gapFactor = 1.3
+
 for (let z = 0; z < 9; z++) {
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
@@ -37,7 +40,7 @@ for (let z = 0; z < 9; z++) {
       const corner = xEdge + yEdge + zEdge === 3
 
       const totalShrinkFactor = shrinkFactor(x) + shrinkFactor(y) + shrinkFactor(z)
-      const outerSize = 1 - totalShrinkFactor * 0.085
+      const outerSize = 1.2 - totalShrinkFactor * 0.11
       const innerSize = outerSize - 0.2
 
       if (x === 8 || y === 8 || z === 8) {
@@ -45,12 +48,12 @@ for (let z = 0; z < 9; z++) {
           color: "white",
           emissive: "white"
         })
-        const coreSizeFactor = (x + y + z - 8) / 16
+        const coreSizeFactor = (x + y + z - 8) / 20
         const coreSize = innerSize * coreSizeFactor
         const coreCube = new THREE.Mesh(new THREE.BoxGeometry(coreSize, coreSize, coreSize), coreMaterial)
-        coreCube.position.x = 1.1 * x
-        coreCube.position.y = -1.1 * y
-        coreCube.position.z = -1.1 * z
+        coreCube.position.x = gapFactor * x
+        coreCube.position.y = -1 * gapFactor * y
+        coreCube.position.z = -1 * gapFactor * z
         scene.add(coreCube)
       }
 
@@ -65,9 +68,9 @@ for (let z = 0; z < 9; z++) {
       })
 
       const innerCube = new THREE.Mesh(new THREE.BoxGeometry(innerSize, innerSize, innerSize), innerMaterial)
-      innerCube.position.x = 1.1 * x
-      innerCube.position.y = -1.1 * y
-      innerCube.position.z = -1.1 * z
+      innerCube.position.x = gapFactor * x
+      innerCube.position.y = -1 * gapFactor * y
+      innerCube.position.z = -1 * gapFactor * z
       scene.add(innerCube)
 
       const outerMaterial = new THREE.MeshPhongMaterial({
@@ -77,9 +80,9 @@ for (let z = 0; z < 9; z++) {
       })
 
       const outerCube = new THREE.Mesh(new THREE.BoxGeometry(outerSize, outerSize, outerSize), outerMaterial)
-      outerCube.position.x = 1.1 * x
-      outerCube.position.y = -1.1 * y
-      outerCube.position.z = -1.1 * z
+      outerCube.position.x = gapFactor * x
+      outerCube.position.y = -1 * gapFactor * y
+      outerCube.position.z = -1 * gapFactor * z
       scene.add(outerCube)
 
     }
@@ -101,13 +104,13 @@ function render() {
   renderer.render(scene, camera)
 }
 
-camera.position.x = -11.4
-camera.position.y = 8.9
-camera.position.z = 17.9
+camera.position.x = -13.9
+camera.position.y = 12.5
+camera.position.z = 20.9
 
-camera.rotation.x = -0.571
-camera.rotation.y = -0.536
-camera.rotation.z = -0.318
+camera.rotation.x = -0.620
+camera.rotation.y = -0.534
+camera.rotation.z = -0.349
 
 animate()
 
@@ -122,3 +125,4 @@ function downloadBase64File(contentBase64: string, fileName: string) {
 }
 
 downloadBase64File(renderer.domElement.toDataURL(), "cube.png")
+window.camera = camera
